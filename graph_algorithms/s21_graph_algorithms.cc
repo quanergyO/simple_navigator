@@ -7,6 +7,7 @@
 #include <set>
 #include <stdexcept>
 #include <limits>
+#include <type_traits>
 
 
 namespace s21
@@ -108,25 +109,45 @@ std::vector<std::vector<int>> GraphAlgorithms::GetLeastSpanningTree(Graph &graph
 template <typename Container>
 std::vector<int> GraphAlgorithms::FirstSearch(Graph &graph, int start_vertex)
 {
-    Container container;
-    container.push(start_vertex);
+    if (start_vertex <= 0 || start_vertex > graph.GetMatrix().size())
+    {
+        throw std::invalid_argument("Invalid argument");
+    }
+    constexpr bool is_stack = std::is_same_v<Container, s21::Stack<int>>;
     std::vector<int> path;
-    std::vector<int> visited(graph.GetMatrix().size(), 0);
+    std::vector<short> visited(graph.GetMatrix().size());
+    Container container;
+
     --start_vertex;
-    visited[start_vertex] = 1;
+    visited[start_vertex] = true;
     container.push(start_vertex);
     path.emplace_back(start_vertex + 1);
-    while (!container.empty())
-    {
-        auto from = container.pop();
+
+    while (!container.empty()) {
+        int from = -1;
+        if constexpr (is_stack) {
+            from = container.top();
+        } else {
+            from = container.front();
+            container.pop();
+        }
+        bool is_found = false;
         for (int to = 0, size = graph.GetMatrix().size(); to != size; ++to) {
             if (!visited[to] && graph.GetMatrix()[from][to] != 0) {
-                visited[to] = 1;
+                is_found = true;
+                visited[to] = true;
                 container.push(to);
                 path.emplace_back(to + 1);
+                if (is_stack)
+                from = to;
             }
         }
+
+        if (is_stack && !is_found) {
+            container.pop();
+        }
     }
+
     return path;
 }
 

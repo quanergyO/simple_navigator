@@ -25,11 +25,7 @@ public:
 
     reference top() { return container_.front(); }
     const_reference top() const { return container_.front(); }
-
     bool empty() const noexcept { return container_.empty(); }
-
-private:
-    
     reference front() { return container_.front(); }
     const_reference front() const { return container_.front(); }
     reference back() { return container_.back(); }
