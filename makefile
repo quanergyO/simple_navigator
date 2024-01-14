@@ -5,12 +5,12 @@ SANITIZE = -fsanitize=address
 FILES = graph/*.cc graph_algorithms/*.cc
 TARGETS = tests/tests.cc
 GCOV = -fprofile-arcs -ftest-coverage -fPIC -pthread
-GTEST = -lgtest -lgtest_main
+GTEST = -lgtest -lgtest_main -L/opt/homebrew/Cellar/googletest/1.14.0/lib
 
 all: test
 
 test: clean
-	${CXX} ${TARGETS} ${FLAGS} ${FILES} ${FLAGS} ${GCOV} ${GTEST} -o test
+	${CXX} ${TARGETS} ${FLAGS} ${FILES} ${FLAGS} ${GCOV} ${GTEST} -o test -I/opt/homebrew/Cellar/googletest/1.14.0/include
 	./test
 
 gcov_report: tests

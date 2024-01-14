@@ -1,6 +1,8 @@
 #ifndef A2SIMPLENAVIGATOR_V1_0_1_GRAPH_ALGORITHMS_S21_GRAPH_ALGORITHMS_CC_
 #define A2SIMPLENAVIGATOR_V1_0_1_GRAPH_ALGORITHMS_S21_GRAPH_ALGORITHMS_CC_
 
+#include <iostream>
+
 #include "s21_graph_algorithms.h"
 #include "../utils/queue.h"
 #include "../utils/stack.h"
@@ -14,11 +16,55 @@ namespace s21
 {
 
 std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph, int start_vertex) {
-    return FirstSearch<s21::Stack<int>>(graph, start_vertex);
+    //return FirstSearch<s21::Stack<int>>(graph, start_vertex);
+    if (start_vertex <= 0 || start_vertex > static_cast<int>(graph.GetMatrix().size())) {
+        throw std::invalid_argument("Invalid argument");
+    }
+    --start_vertex;
+    std::vector<int> path;
+    s21::Stack<int> container;
+    std::vector<bool> visited(graph.GetMatrix().size(), false);
+    visited[start_vertex] = true;
+    container.push(start_vertex);
+    while (!container.empty()) {
+        auto from = container.pop();
+        path.emplace_back(from + 1);
+        std::cout << from + 1 << ' ';
+        for (int to = 0, size = graph.GetMatrix().size(); to != size; ++to) {
+            if (!visited[to] && graph.GetMatrix()[from][to] != 0) {
+                container.push(to);
+                visited[to] = true;
+                break;
+            }
+        }
+    }
+    return path;
 }
 
 std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph, int start_vertex) {
-    return FirstSearch<s21::Queue<int>>(graph, start_vertex);
+    // return FirstSearch<s21::Queue<int>>(graph, start_vertex);
+    if (start_vertex <= 0 || start_vertex > static_cast<int>(graph.GetMatrix().size()))
+    {
+        throw std::invalid_argument("Invalid argument");
+    }
+    --start_vertex;
+    std::vector<int> path;
+    s21::Queue<int> container;
+    std::vector<bool> visited(graph.GetMatrix().size(), false);
+    visited[start_vertex] = true;
+    container.push(start_vertex);
+    while (!container.empty())
+    {
+        auto from = container.pop();
+        path.emplace_back(from + 1);
+        for (int to = 0, size = graph.GetMatrix().size(); to != size; ++to) {
+            if (!visited[to] && graph.GetMatrix()[from][to] != 0) {
+                container.push(to);
+                visited[to] = true;
+            }
+        }
+    }
+    return path;
 }
 
 size_t GraphAlgorithms::GetShortestPathBetweenVertices(Graph &graph, int vertex1, int vertex2)
@@ -77,7 +123,7 @@ std::vector<std::vector<int>> GraphAlgorithms::GetShortestPathsBetweenAllVertice
     return distance;
 }
 
-std::vector<std::vector<int>> GraphAlgorithms::GetLeastSpanningTree(Graph &graph) 
+std::vector<std::vector<int>> GraphAlgorithms::GetLeastSpanningTree(Graph &graph)
 {
     const size_t vertexes_count = graph.GetMatrix().size();
     std::vector<std::vector<int>> result(vertexes_count, std::vector<int>(vertexes_count));
@@ -92,7 +138,7 @@ std::vector<std::vector<int>> GraphAlgorithms::GetLeastSpanningTree(Graph &graph
     while (!unvisited.empty()) {
         for (int from : visited) {
             int to_value = std::numeric_limits<int>::max();
-            int to = 0; 
+            int to = 0;
             for (int it : unvisited) {
                 if (graph.GetMatrix()[from][it] < to_value) {
                     to_value = graph.GetMatrix()[from][it];
@@ -109,7 +155,7 @@ std::vector<std::vector<int>> GraphAlgorithms::GetLeastSpanningTree(Graph &graph
 template <typename Container>
 std::vector<int> GraphAlgorithms::FirstSearch(Graph &graph, int start_vertex)
 {
-    if (start_vertex <= 0 || start_vertex > graph.GetMatrix().size())
+    if (start_vertex <= 0 || start_vertex > static_cast<int>(graph.GetMatrix().size()))
     {
         throw std::invalid_argument("Invalid argument");
     }
