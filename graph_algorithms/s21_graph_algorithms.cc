@@ -1,8 +1,6 @@
 #ifndef A2SIMPLENAVIGATOR_V1_0_1_GRAPH_ALGORITHMS_S21_GRAPH_ALGORITHMS_CC_
 #define A2SIMPLENAVIGATOR_V1_0_1_GRAPH_ALGORITHMS_S21_GRAPH_ALGORITHMS_CC_
 
-#include <iostream>
-
 #include "s21_graph_algorithms.h"
 #include "../utils/queue.h"
 #include "../utils/stack.h"
@@ -26,16 +24,21 @@ std::vector<int> GraphAlgorithms::DepthFirstSearch(Graph &graph, int start_verte
     std::vector<bool> visited(graph.GetMatrix().size(), false);
     visited[start_vertex] = true;
     container.push(start_vertex);
+    path.emplace_back(start_vertex + 1);
     while (!container.empty()) {
-        auto from = container.pop();
-        path.emplace_back(from + 1);
-        std::cout << from + 1 << ' ';
+        auto from = container.top();
+        bool is_found = false;
         for (int to = 0, size = graph.GetMatrix().size(); to != size; ++to) {
             if (!visited[to] && graph.GetMatrix()[from][to] != 0) {
                 container.push(to);
+                is_found = true;
                 visited[to] = true;
-                break;
+                path.emplace_back(to + 1);
+                from = to;
             }
+        }
+        if (!is_found) {
+            container.pop();
         }
     }
     return path;
@@ -69,7 +72,7 @@ std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph, int start_ver
 
 size_t GraphAlgorithms::GetShortestPathBetweenVertices(Graph &graph, int vertex1, int vertex2)
 {
-    if (vertex1 <= 0 || vertex2 <= 0)
+    if (vertex1 <= 0 || vertex2 <= 0 || vertex1 >= graph.GetMatrix().size() || vertex2 >= graph.GetMatrix().size())
     {
         throw std::invalid_argument("Invalid argument");
     }

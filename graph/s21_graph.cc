@@ -19,16 +19,19 @@ void Graph::LoadGraphFromFile(std::string filename)
     }
     std::string line;
     std::getline(file, line);
-    size_t count;
+    int count;
     {
         std::istringstream stream(std::move(line));
         stream >> count;
+        if (count <= 0) {
+            throw std::invalid_argument("Bad graph size");
+        }
     }
-    for (size_t i = 0; i < count; ++i) {
+    for (int i = 0; i < count; ++i) {
         std::getline(file, line);
         std::istringstream stream(std::move(line));
         std::vector<int> vec_tmp(count);
-        for (size_t j = 0; j < count; ++j) {
+        for (int j = 0; j < count; ++j) {
             stream >> vec_tmp[j];
         }
         matrix_.emplace_back(vec_tmp);

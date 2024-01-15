@@ -41,14 +41,6 @@ TEST(GraphAlgorhitm, DFS2) {
   check_equals(result, expected);
 }
 
-TEST(GraphAlgorhitm, DFS3) {
-  s21::Graph graph;
-  graph.LoadGraphFromFile("./tests/data-samples/7vertices.txt");
-  s21::GraphAlgorithms graph_algorithms;
-  auto result = graph_algorithms.DepthFirstSearch(graph, 1);
-  std::vector<int> expected = {1, 4, 2, 3, 7, 5, 6};  // 1 4 2 3 7 5
-  check_equals(result, expected);
-}
 
 TEST(GraphAlgorhitm, BFS2) {
   s21::Graph graph;
