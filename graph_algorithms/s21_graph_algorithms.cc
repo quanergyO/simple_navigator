@@ -72,7 +72,8 @@ std::vector<int> GraphAlgorithms::BreadthFirstSearch(Graph &graph, int start_ver
 
 size_t GraphAlgorithms::GetShortestPathBetweenVertices(Graph &graph, int vertex1, int vertex2)
 {
-    if (vertex1 <= 0 || vertex2 <= 0 || vertex1 >= graph.GetMatrix().size() || vertex2 >= graph.GetMatrix().size())
+    if (vertex1 <= 0 || vertex2 <= 0 || vertex1 > static_cast<int>(graph.GetMatrix().size())
+        || vertex2 > static_cast<int>(graph.GetMatrix().size()))
     {
         throw std::invalid_argument("Invalid argument");
     }
@@ -149,9 +150,17 @@ std::vector<std::vector<int>> GraphAlgorithms::GetLeastSpanningTree(Graph &graph
                 }
             }
             result[from][to] = to_value;
-            // heap
+            // TODO
         }
     }
+    return result;
+}
+
+TsmResult GraphAlgorithms::SolveTravelingSalesmanProblem(Graph &)
+{
+    // TODO
+    TsmResult result;
+
     return result;
 }
 
@@ -199,7 +208,6 @@ std::vector<int> GraphAlgorithms::FirstSearch(Graph &graph, int start_vertex)
 
     return path;
 }
-
 
 }
 
