@@ -6,8 +6,8 @@
 #include "../graph/s21_graph.h"
 #include "../graph_algorithms/s21_graph_algorithms.h"
 
-void check_equals(const std::vector<int> &result,
-                  const std::vector<int> &expected) {
+void check_equals(const std::vector<int>& result,
+                  const std::vector<int>& expected) {
   ASSERT_EQ(result.size(), expected.size());
   for (size_t i = 0; i < result.size(); ++i) {
     ASSERT_EQ(result[i], expected[i]);
@@ -40,7 +40,6 @@ TEST(GraphAlgorhitm, DFS2) {
   std::vector<int> expected = {1, 2, 3, 4, 5, 6};
   check_equals(result, expected);
 }
-
 
 TEST(GraphAlgorhitm, BFS2) {
   s21::Graph graph;
@@ -101,5 +100,67 @@ TEST(GraphAlgorithms, ShortestPathsBetweenAllVertices) {
   ASSERT_EQ(result[1][3], 15);
 }
 
-TEST(GraphAlgorhitm, S) {}
+TEST(GraphAlgorhitm, GetLeastSpanningTree) {
+  s21::Graph graph;
+  graph.LoadGraphFromFile("./tests/data-samples/graph_example1.txt");
+  s21::GraphAlgorithms graph_algorithms;
+  auto result = graph_algorithms.GetLeastSpanningTree(graph);
+  // for (auto row : result) {
+  //   for (auto dist : row) {
+  //     std::cout << dist << " ";
+  //   }
+  //   std::cout << std::endl;
+  // }
+  int expected = 150;
+  int sum = 0;
+  for (auto& row : result) {
+    for (auto& dist : row) {
+      sum += dist;
+    }
+  }
+  ASSERT_EQ(sum / 2, expected);
+}
+
+TEST(GraphAlgorhitm, GetLeastSpanningTree2) {
+  s21::Graph graph;
+  graph.LoadGraphFromFile("./tests/data-samples/connected.txt");
+  s21::GraphAlgorithms graph_algorithms;
+  auto result = graph_algorithms.GetLeastSpanningTree(graph);
+  // for (auto row : result) {
+  //   for (auto dist : row) {
+  //     std::cout << dist << " ";
+  //   }
+  //   std::cout << std::endl;
+  // }
+  int expected = 33;
+  int sum = 0;
+  for (auto& row : result) {
+    for (auto& dist : row) {
+      sum += dist;
+    }
+  }
+  ASSERT_EQ(sum / 2, expected);
+}
+
+TEST(GraphAlgorhitm, GetLeastSpanningTree3) {
+  s21::Graph graph;
+  graph.LoadGraphFromFile("./tests/data-samples/default_matrix.txt");
+  s21::GraphAlgorithms graph_algorithms;
+  auto result = graph_algorithms.GetLeastSpanningTree(graph);
+  // for (auto row : result) {
+  //   for (auto dist : row) {
+  //     std::cout << dist << " ";
+  //   }
+  //   std::cout << std::endl;
+  // }
+  int expected = 67;
+  int sum = 0;
+  for (auto& row : result) {
+    for (auto& dist : row) {
+      sum += dist;
+    }
+  }
+  std::cout << sum << " ";
+  ASSERT_EQ(sum / 2, expected);
+}
 #endif  // A2SIMPLENAVIGATOR_V1_0_1_TESTS_TEST__CC_
